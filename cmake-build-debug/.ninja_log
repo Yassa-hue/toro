@@ -1,3 +1,9 @@
 # ninja log v5
 0	383	1663267414669140053	CMakeFiles/toroProject.dir/main.cpp.o	6fd50cd61ad84ebb
 384	422	1663267414709425095	toroProject	2c5b2a81ab57e26d
+5	560	1663403807752632934	CMakeFiles/toroProject.dir/main.cpp.o	6fd50cd61ad84ebb
+7	560	1663403807754202983	CMakeFiles/toroProject.dir/Lexer.cpp.o	726242742e2ce234
+7	563	1663403807757532029	CMakeFiles/toroProject.dir/Lexer_Test.cpp.o	4a8f46dc14d9bc8d
+563	605	1663403807801494479	toroProject	cf2ed52add6f25f7
+4	480	1663404072850630748	CMakeFiles/toroProject.dir/Lexer.cpp.o	726242742e2ce234
+480	520	1663404072892189360	toroProject	cf2ed52add6f25f7
