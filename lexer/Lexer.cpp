@@ -11,7 +11,7 @@ Lexer :: Lexer() : input_stream(nullptr), cur_char(' '){
 }
 
 Lexer::Lexer (std::ifstream *__input_stream) : input_stream(__input_stream), cur_char(' ') {
-    nextChar();
+    // nextChar();
 }
 
 void Lexer::nextChar() {
@@ -54,6 +54,7 @@ void Lexer::skip_commit() {
 
 
 Token Lexer::get_token() {
+    nextChar();
     skip_white_spaces();
 
     // Arithmatic operators
@@ -70,28 +71,32 @@ Token Lexer::get_token() {
     // Logic operators
 
     else if (cur_char == '>') {
-        if (peek() == '=')
+        if (peek() == '=') {
+            nextChar();
             return Token(">=", GTEQ);
-        else
+        } else
             return Token(">", GT);
     } else if (cur_char == '<') {
-        if (peek() == '=')
+        if (peek() == '=') {
+            nextChar();
             return Token("<=", LTEQ);
-        else
+        } else
             return Token("<", LT);
     } else if (cur_char == '=') {
-        if (peek() == '=')
+        if (peek() == '=') {
+            nextChar();
             return Token("==", EQEQ);
-        else
+        } else
             return Token("=", EQ);
     }
 
     else if (cur_char == '!') {
-        if (peek() == '=')
+        if (peek() == '=') {
+            nextChar();
             return Token("!=", NOTEQ);
-        else
+        } else
             abort("Invalid token");
     }
-
     abort("Invalid token");
+    return Token();
 }

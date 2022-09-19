@@ -45,9 +45,12 @@ using namespace std;
 
 
 struct Token {
-    string text = "";
-    int kind = INV;
-    Token() {}
+    string text;
+    int kind;
+    Token() {
+        text = "";
+        kind = INV;
+    }
 
     Token (string __text, int __kind) {
         text = __text;

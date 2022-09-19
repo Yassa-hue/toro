@@ -12,7 +12,9 @@ class Lexer_Test {
 private:
     Lexer lexer;
 
-    void test();
+    void test_input();
+
+    void test_token();
 
 
 
