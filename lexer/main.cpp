@@ -1,10 +1,11 @@
 #include <iostream>
+#include "Lexer_Test.h"
 
 
 using namespace std;
 
 
 int main() {
-    // inter point
+    Lexer_Test lt(1);
     return 0;
 }

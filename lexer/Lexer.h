@@ -8,13 +8,12 @@
 #include <iostream>
 #include <fstream>
 #include <map>
-
+#include "./Token.h"
 
 
 using namespace std;
 
 
-typedef map<string, string> token;
 
 
 
@@ -39,13 +38,13 @@ public:
 
     char peek();
 
-    void abort();
+    void abort(string __msg);
 
     void skip_white_spaces();
 
     void skip_commit();
 
-    token get_token();
+    Token get_token();
 };
 
 

@@ -5,8 +5,8 @@
 #ifndef TOROPROJECT_LEXER_TEST_H
 #define TOROPROJECT_LEXER_TEST_H
 
-#include "Lexer.h"
-#define LEXER_TESTS_PATH string("./lexer_tests/")
+#include "./Lexer.h"
+#define LEXER_TESTS_PATH string("./")
 
 class Lexer_Test {
 private:

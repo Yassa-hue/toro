@@ -38,47 +38,41 @@ include CMakeFiles/rules.ninja
 
 cmake_ninja_workdir = /Users/yassa/CLionProjects/toroProject/cmake-build-debug/
 # =============================================================================
-# Object build statements for EXECUTABLE target toroProject
+# Object build statements for EXECUTABLE target main.cpp
 
 
 #############################################
-# Order-only phony target for toroProject
+# Order-only phony target for main.cpp
 
-build cmake_object_order_depends_target_toroProject: phony || CMakeFiles/toroProject.dir
+build cmake_object_order_depends_target_main.cpp: phony || CMakeFiles/main.cpp.dir
 
-build CMakeFiles/toroProject.dir/main.cpp.o: CXX_COMPILER__toroProject_Debug /Users/yassa/CLionProjects/toroProject/main.cpp || cmake_object_order_depends_target_toroProject
-  DEP_FILE = CMakeFiles/toroProject.dir/main.cpp.o.d
+build CMakeFiles/main.cpp.dir/Lexer.cpp.o: CXX_COMPILER__main.2ecpp_Debug /Users/yassa/CLionProjects/toroProject/Lexer.cpp || cmake_object_order_depends_target_main.cpp
+  DEP_FILE = CMakeFiles/main.cpp.dir/Lexer.cpp.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++14
-  OBJECT_DIR = CMakeFiles/toroProject.dir
-  OBJECT_FILE_DIR = CMakeFiles/toroProject.dir
+  OBJECT_DIR = CMakeFiles/main.cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/main.cpp.dir
 
-build CMakeFiles/toroProject.dir/Lexer.cpp.o: CXX_COMPILER__toroProject_Debug /Users/yassa/CLionProjects/toroProject/Lexer.cpp || cmake_object_order_depends_target_toroProject
-  DEP_FILE = CMakeFiles/toroProject.dir/Lexer.cpp.o.d
+build CMakeFiles/main.cpp.dir/Lexer_Test.cpp.o: CXX_COMPILER__main.2ecpp_Debug /Users/yassa/CLionProjects/toroProject/Lexer_Test.cpp || cmake_object_order_depends_target_main.cpp
+  DEP_FILE = CMakeFiles/main.cpp.dir/Lexer_Test.cpp.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++14
-  OBJECT_DIR = CMakeFiles/toroProject.dir
-  OBJECT_FILE_DIR = CMakeFiles/toroProject.dir
-
-build CMakeFiles/toroProject.dir/Lexer_Test.cpp.o: CXX_COMPILER__toroProject_Debug /Users/yassa/CLionProjects/toroProject/Lexer_Test.cpp || cmake_object_order_depends_target_toroProject
-  DEP_FILE = CMakeFiles/toroProject.dir/Lexer_Test.cpp.o.d
-  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++14
-  OBJECT_DIR = CMakeFiles/toroProject.dir
-  OBJECT_FILE_DIR = CMakeFiles/toroProject.dir
+  OBJECT_DIR = CMakeFiles/main.cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/main.cpp.dir
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target toroProject
+# Link build statements for EXECUTABLE target main.cpp
 
 
 #############################################
-# Link the executable toroProject
+# Link the executable main.cpp
 
-build toroProject: CXX_EXECUTABLE_LINKER__toroProject_Debug CMakeFiles/toroProject.dir/main.cpp.o CMakeFiles/toroProject.dir/Lexer.cpp.o CMakeFiles/toroProject.dir/Lexer_Test.cpp.o
+build main.cpp: CXX_EXECUTABLE_LINKER__main.2ecpp_Debug CMakeFiles/main.cpp.dir/Lexer.cpp.o CMakeFiles/main.cpp.dir/Lexer_Test.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
-  OBJECT_DIR = CMakeFiles/toroProject.dir
+  OBJECT_DIR = CMakeFiles/main.cpp.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = toroProject
-  TARGET_PDB = toroProject.dbg
+  TARGET_FILE = main.cpp
+  TARGET_PDB = main.cpp.dbg
 
 
 #############################################
@@ -114,7 +108,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 #############################################
 # Folder: /Users/yassa/CLionProjects/toroProject/cmake-build-debug
 
-build all: phony toroProject
+build all: phony main.cpp
 
 # =============================================================================
 # Built-in targets
