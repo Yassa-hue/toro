@@ -21,6 +21,7 @@ using namespace std;
 #define GOTO 5
 #define PRINT 6
 #define INPUT 7
+#define OUTPUT 77
 #define LET 8
 #define IF 9
 #define THEN 10

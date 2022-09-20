@@ -25,6 +25,13 @@ private:
     char cur_char;
 
 
+    bool is_alpha(char __c) const;
+
+    bool is_num(char __c) const;
+
+    int keyword_val(const string &str) const;
+
+
 public:
 
     Lexer();
@@ -32,9 +39,9 @@ public:
     Lexer(ifstream *__input_stream);
 
 
-    void nextChar();
+    void next_char();
 
-    char getCurChar();
+    char get_cur_char();
 
     char peek();
 
