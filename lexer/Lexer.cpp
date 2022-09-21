@@ -57,7 +57,7 @@ void Lexer::next_char() {
     if (input_stream->eof()) // reaches the end of the input code
         cur_char = '\0';
     else // takes one char at a time
-        *(input_stream) >> noskipws >> cur_char;
+        *(input_stream) >> cur_char;
 
 }
 
@@ -80,25 +80,24 @@ void Lexer::abort(string __msg) {
 }
 
 
-void Lexer::skip_white_spaces() {
-    if (cur_char == ' ' || cur_char == '\n' || cur_char == '\t')
-        next_char();
-}
 
 
 void Lexer::skip_commit() {
-    if (cur_char == '#')
-        while (cur_char != '\n')
-            next_char();
+    while (cur_char == '#') {
+        input_stream->ignore(100, '\n');
+        next_char();
+    }
 }
 
 
 Token Lexer::get_token() {
     next_char();
-    skip_white_spaces();
     skip_commit();
-
+    cout << '(' << (cur_char == '\n' ? '~' : cur_char) << ')' << ' ';
     // Arithmatic operators
+
+    if (cur_char == '\0')
+        abort("End of file");
 
     if (cur_char == '+')
         return Token("+", PLUS);
@@ -151,8 +150,9 @@ Token Lexer::get_token() {
 
     // Number token
     if (cur_char >= '0' && cur_char <= '9') {
-        while (cur_char == '.' || (cur_char >= '0' && cur_char <= '9')) {
-            if (cur_char == '.' && peek() < '0' || peek() > '9')
+        while ((cur_char == '.' || is_num(cur_char)) // current char is a number
+            && (peek() == '.' || is_num(peek()))) {  // it is not the end
+            if (cur_char == '.' && !is_num(peek()))  // if there is no nums after the decimal point (34.)
                 abort("Inappropriate decimal point");
             next_char();
         }
@@ -162,29 +162,22 @@ Token Lexer::get_token() {
 
 
     // Identifier token
-    string identifier, var_name;
-    while (is_alpha(cur_char)) {
-        identifier.push_back(cur_char);
+
+    string identifier;
+
+    if (!is_alpha(cur_char))
+        abort("Invalid identifier");
+
+    identifier.push_back(cur_char);
+
+    while (is_alpha(peek()) || is_num(peek())) {
         next_char();
+        identifier.push_back(cur_char);
     }
 
     if (keyword_val(identifier) != INV)
         return Token("keyword", keyword_val(identifier));
 
-    if (cur_char != ' ')
-        abort("Invalid identifier");
-
-    next_char();
-    if (!is_alpha(cur_char))
-        abort("Invalid variable name");
-
-    while (is_alpha(cur_char) || is_num(cur_char)) {
-        var_name.push_back(cur_char);
-        next_char();
-    }
-
-    if (keyword_val(var_name) != INV)
-        abort("Invalid variable name");
 
     return Token("ident", IDENT);
 }

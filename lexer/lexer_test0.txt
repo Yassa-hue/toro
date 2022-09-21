@@ -3,4 +3,6 @@
 <= < != - = "string" / > "str"
 123 + 345 = -345 * "234"
 let int x = 3
-if iff while = "a7a"
+
+
+if iff while = "a7a" 2

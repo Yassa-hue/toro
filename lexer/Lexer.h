@@ -47,8 +47,6 @@ public:
 
     void abort(string __msg);
 
-    void skip_white_spaces();
-
     void skip_commit();
 
     Token get_token();
