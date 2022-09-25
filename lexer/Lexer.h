@@ -24,6 +24,8 @@ private:
 
     char cur_char;
 
+    bool check_nl;
+
 
     bool is_alpha(char __c) const;
 

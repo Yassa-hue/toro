@@ -57,6 +57,14 @@ struct Token {
         text = __text;
         kind = __kind;
     }
+
+    bool operator == (Token __token) {
+        return (__token.text == text && __token.kind == kind);
+    }
+
+    bool operator != (Token __token) {
+        return (__token.text != text || __token.kind != kind);
+    }
 };
 
 

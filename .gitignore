@@ -1,4 +1,6 @@
-cmake-build-debug/
-CMakeLists.txt
-a.out
-object_files/
+./cmake-build-debug/
+./CMakeLists.txt
+./a.out
+./object_files/
+*.o
+*.out

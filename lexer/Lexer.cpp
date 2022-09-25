@@ -43,22 +43,25 @@ int Lexer::keyword_val(const std::string &str) const {
     return INV;
 }
 
-Lexer :: Lexer() : input_stream(nullptr), cur_char(' '){
+Lexer :: Lexer() : input_stream(nullptr), cur_char(' '), check_nl(true){
     // empty initializer
 
 }
 
-Lexer::Lexer (std::ifstream *__input_stream) : input_stream(__input_stream), cur_char(' ') {
+Lexer::Lexer (std::ifstream *__input_stream) : input_stream(__input_stream), cur_char(' '), check_nl(true) {
     // nextChar();
 }
 
 void Lexer::next_char() {
-
-    if (input_stream->eof()) // reaches the end of the input code
-        cur_char = '\0';
-    else // takes one char at a time
+    //cout << "| " << input_stream->eof() << " | ";
+    if (input_stream->peek() == EOF) {// reaches the end of the input code
+        cur_char = EOF;
+        //cout << "ch1";
+    } else { // takes one char at a time
         *(input_stream) >> cur_char;
-
+        //cout << "ch2";
+    }
+    //cout << endl;
 }
 
 
@@ -69,7 +72,7 @@ char Lexer::get_cur_char() {
 
 char Lexer::peek() {
     if (input_stream->eof()) // reaches the end of the input code
-        return '\0';
+        return EOF;
 
     return input_stream->peek();
 }
@@ -91,13 +94,25 @@ void Lexer::skip_commit() {
 
 
 Token Lexer::get_token() {
+
+    // handles newline
+    if (check_nl && input_stream->peek() == '\n') {
+        check_nl = false;
+        return Token("nl", NEWLINE);
+    }
     next_char();
     skip_commit();
-    cout << '(' << (cur_char == '\n' ? '~' : cur_char) << ')' << ' ';
+
+    check_nl = false;
+
+//    cout << "get token '" << cur_char << "'" << endl;
     // Arithmatic operators
 
-    if (cur_char == '\0')
-        abort("End of file");
+    if (cur_char == EOF)
+        return Token("EOF", EOF);
+
+
+//    cout << '(' << (cur_char == '\n' ? '~' : cur_char) << ')' << ' ';
 
     if (cur_char == '+')
         return Token("+", PLUS);
@@ -141,10 +156,12 @@ Token Lexer::get_token() {
     else if (cur_char == '\"') {
         next_char();
         while (cur_char != '\"') {
-            if (cur_char == '\0')
+            //cout << "string loop '" << cur_char << "'" << endl;
+            if (cur_char == EOF)
                 abort("Expected \" at the end of the string");
             next_char();
         }
+        //cout << "end string loop '" << cur_char << "'" << endl;
         return Token("str", STRING);
     }
 

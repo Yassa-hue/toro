@@ -38,9 +38,9 @@ Lexer_Test::Lexer_Test(int __num_of_tests) {
 
 
 void Lexer_Test::test_input() {
-    while (lexer.peek() != '\0') {
+    while (lexer.peek() != EOF) {
         lexer.next_char();
-        cout << lexer.get_cur_char() << '\n';
+        cout << '(' << lexer.get_cur_char() << ')' << '\n';
     }
     cout << endl;
 }
@@ -48,7 +48,7 @@ void Lexer_Test::test_input() {
 
 void Lexer_Test::test_token() {
     Token tk;
-    while (lexer.get_cur_char() != '\0') {
+    while (lexer.get_cur_char() != EOF) {
         try {
             tk = lexer.get_token();
             cout << tk.text << ' ' << tk.kind << '\n';
