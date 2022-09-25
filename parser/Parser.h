@@ -15,6 +15,8 @@ private:
 
     Token cur_token, peek_token;
 
+    bool open_if;
+
     void next_token();
 
     bool is_cur_token(Token __token) const;

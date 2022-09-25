@@ -96,6 +96,7 @@ void Lexer::skip_commit() {
 Token Lexer::get_token() {
 
     // handles newline
+    // cout << "cl = " << check_nl << " Peek is of " << cur_char <<" (" << (int)(input_stream->peek()) << ')' << endl;
     if (check_nl && input_stream->peek() == '\n') {
         check_nl = false;
         return Token("nl", NEWLINE);
@@ -103,7 +104,7 @@ Token Lexer::get_token() {
     next_char();
     skip_commit();
 
-    check_nl = false;
+    check_nl = true;
 
 //    cout << "get token '" << cur_char << "'" << endl;
     // Arithmatic operators

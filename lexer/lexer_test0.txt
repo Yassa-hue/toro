@@ -1,2 +1,5 @@
+output "hello world"
+if 7.5 <= yassa then
+output hey
+endif
 output "yassa"
-output "hehe"
