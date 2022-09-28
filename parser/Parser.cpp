@@ -91,11 +91,13 @@ void Parser::statement() {
     if (is_cur_token(Token("keyword", OUTPUT))) {
         next_token();
 
-        if (is_cur_token(Token("str", STRING))) {
+        if (is_cur_token(Token("", STRING))) {
             cout << "printing text" << endl;
             next_token();
-        } else
+        } else {
+            cout << "printing expression" << endl;
             expression();
+        }
     }
 
     // If statement : if comparison then
@@ -148,7 +150,7 @@ void Parser::statement() {
 
         next_token();
 
-        match(Token("ident", IDENT));
+        match(Token("", IDENT));
         match(Token("=", EQ));
 
         expression();
@@ -160,12 +162,12 @@ void Parser::statement() {
         cout << "input statement" << endl;
 
         next_token();
-        match(Token("ident", IDENT));
+        match(Token("", IDENT));
     }
 
 
     // assigning statement : ident = expression
-    else if (is_cur_token(Token("keyword", INPUT))) {
+    else if (is_cur_token(Token("", IDENT))) {
         cout << "assigning statement" << endl;
 
         next_token();
@@ -236,8 +238,8 @@ void Parser::unary() {
 void Parser::primary() {
     test_log("calling primary on " + cur_token.text);
 
-    if (!is_cur_token(Token("ident", IDENT))
-        && !is_cur_token(Token("num", NUMBER)))
+    if (!is_cur_token(Token("", IDENT))
+        && !is_cur_token(Token("", NUMBER)))
         abort("Expected identifier or number found " + cur_token.text);
     next_token();
 }

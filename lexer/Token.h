@@ -58,11 +58,21 @@ struct Token {
         kind = __kind;
     }
 
+    bool allow_text_def(Token __token) {
+        return (__token.kind == IDENT || kind == IDENT
+            || __token.kind == STRING || kind == STRING
+            || __token.kind == NUMBER || kind == NUMBER);
+    }
+
     bool operator == (Token __token) {
+        if (allow_text_def(__token))
+            return (__token.kind == kind);
         return (__token.text == text && __token.kind == kind);
     }
 
     bool operator != (Token __token) {
+        if (allow_text_def(__token))
+            return (__token.kind != kind);
         return (__token.text != text || __token.kind != kind);
     }
 };

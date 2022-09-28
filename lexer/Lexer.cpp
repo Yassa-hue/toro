@@ -156,26 +156,31 @@ Token Lexer::get_token() {
     // String token
     else if (cur_char == '\"') {
         next_char();
+        string str;
         while (cur_char != '\"') {
             //cout << "string loop '" << cur_char << "'" << endl;
+            str.push_back(cur_char);
             if (cur_char == EOF)
                 abort("Expected \" at the end of the string");
             next_char();
         }
         //cout << "end string loop '" << cur_char << "'" << endl;
-        return Token("str", STRING);
+        return Token(str, STRING);
     }
 
     // Number token
     if (cur_char >= '0' && cur_char <= '9') {
+        string num;
+
         while ((cur_char == '.' || is_num(cur_char)) // current char is a number
             && (peek() == '.' || is_num(peek()))) {  // it is not the end
+            num.push_back(cur_char);
             if (cur_char == '.' && !is_num(peek()))  // if there is no nums after the decimal point (34.)
                 abort("Inappropriate decimal point");
             next_char();
         }
 
-        return Token("num", NUMBER);
+        return Token(num, NUMBER);
     }
 
 
@@ -197,5 +202,5 @@ Token Lexer::get_token() {
         return Token("keyword", keyword_val(identifier));
 
 
-    return Token("ident", IDENT);
+    return Token(identifier, IDENT);
 }
