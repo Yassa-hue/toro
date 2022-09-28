@@ -12,7 +12,7 @@ bool Lexer::is_alpha(char __c) const {
 
 
 bool Lexer::is_num(char __c) const {
-    return (__c >= '1' & __c <= '9');
+    return (__c >= '0' & __c <= '9');
 }
 
 
@@ -179,7 +179,7 @@ Token Lexer::get_token() {
                 abort("Inappropriate decimal point");
             next_char();
         }
-
+        num.push_back(cur_char);
         return Token(num, NUMBER);
     }
 

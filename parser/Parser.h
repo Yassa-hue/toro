@@ -7,6 +7,7 @@
 
 
 #include "../lexer/Lexer.h"
+#include "../emitter/Emitter.h"
 
 #include <set>
 
@@ -20,6 +21,8 @@
 class Parser {
 private:
     Lexer *lexer;
+
+    Emitter *emitter;
 
     set <string> declared_idents;
 
@@ -56,7 +59,7 @@ private:
     void newline();
 
 public:
-    Parser(Lexer *__lexer);
+    Parser(Lexer *__lexer, Emitter * __emitter);
 
 };
 

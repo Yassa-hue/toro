@@ -1,0 +1,3 @@
+/Users/yassa/CLionProjects/toroProject/cmake-build-debug/CMakeFiles/main.cpp.dir
+/Users/yassa/CLionProjects/toroProject/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/yassa/CLionProjects/toroProject/cmake-build-debug/CMakeFiles/rebuild_cache.dir

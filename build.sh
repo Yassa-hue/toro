@@ -6,9 +6,16 @@ obj_files_path="./object_files"
 # Lexer files
 g++ -c ./lexer/Lexer.cpp -o $obj_files_path/Lexer.o
 
+# Lexer files
+g++ -c ./parser/Parser.cpp -o $obj_files_path/Parser.o
+
+# Lexer files
+g++ -c ./emitter/Emitter.cpp -o $obj_files_path/Emitter.o
+
+
 # Main file
 g++ -c main.cpp -o $obj_files_path/main.o
 
 # Link the object files
-g++ $obj_files_path/main.o $obj_files_path/Lexer.o
+g++ $obj_files_path/main.o $obj_files_path/Lexer.o $obj_files_path/Parser.o $obj_files_path/Emitter.o
 

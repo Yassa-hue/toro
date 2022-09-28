@@ -6,12 +6,12 @@
 
 #ifndef TESTING_LOG
 
-//#define TESTING_LOG
+#define TESTING_LOG
 
 #endif
 
 
-Parser::Parser(Lexer *__lexer) : lexer(__lexer){
+Parser::Parser(Lexer *__lexer, Emitter *__emitter) : lexer(__lexer), emitter(__emitter){
 
     test_log("starting parsing");
 
@@ -105,16 +105,20 @@ void Parser::program() {
 void Parser::statement() {
     test_log("Calling statement on " + cur_token.text + " " + peek_token.text);
 
+    emitter->print_ind_tabs();
     // Output statement : print expression | string
     if (is_cur_token(Token("keyword", OUTPUT))) {
         next_token();
 
         if (is_cur_token(Token("", STRING))) {
             cout << "printing text" << endl;
+            emitter->output_statement_str(cur_token.text);
             next_token();
         } else {
             cout << "printing expression" << endl;
+            emitter->output_statement_num();
             expression();
+            emitter->expression(" << endl");
         }
     }
 
@@ -123,11 +127,14 @@ void Parser::statement() {
 
         cout << "starting if statement" << endl;
 
+        emitter->start_if();
+
         // comparison
         next_token();
         comparison();
 
         // then keyword
+        emitter->then();
         match(Token("keyword", THEN));
         newline();
 
@@ -136,6 +143,7 @@ void Parser::statement() {
             statement();
 
         // endif
+        emitter->end_if();
         match(Token("keyword", ENDIF));
         cout << "end if statement" << endl;
     }
@@ -144,12 +152,15 @@ void Parser::statement() {
     else if (is_cur_token(Token("keyword", WHILE))) {
         cout << "starting while statement" << endl;
 
+        emitter->start_while();
+
         // comparison
         next_token();
         comparison();
 
         // repeat keyword
         match(Token("keyword", REPEAT));
+        emitter->repeat();
         newline();
 
         // zero or more statements till reaching endwhile
@@ -157,6 +168,7 @@ void Parser::statement() {
             statement();
 
         // endwhile
+        emitter->end_while();
         match(Token("keyword", ENDWHILE));
         cout << "end while statement" << endl;
     }
@@ -167,6 +179,8 @@ void Parser::statement() {
         cout << "let statement" << endl;
 
         next_token();
+
+        emitter->create_var(cur_token.text);
 
         match(Token("", IDENT), CHECK_IDENT_NOT_DECLARED);
         match(Token("=", EQ));
@@ -180,7 +194,9 @@ void Parser::statement() {
         cout << "input statement" << endl;
 
         next_token();
+        emitter->input_statement(cur_token.text);
         match(Token("", IDENT), CHECK_IDENT_DECLARED);
+
     }
 
 
@@ -192,11 +208,11 @@ void Parser::statement() {
         if (!identifier_is_declared())
             abort("Undeclared identifier " + cur_token.text);
 
+        emitter->assigning(cur_token.text);
 
         next_token();
         match(Token("=", EQ));
 
-        next_token();
         expression();
     }
 
@@ -222,7 +238,7 @@ void Parser::expression() {
     // zero or more terms
     while (is_cur_token(Token("+", PLUS))
            || is_cur_token(Token("-", MINUS))) {
-
+        emitter->expression(cur_token.text);
         next_token();
         term();
     }
@@ -237,7 +253,7 @@ void Parser::term () {
 
     while (is_cur_token(Token("*", AST))
            || is_cur_token(Token("/", SLASH))) {
-
+        emitter->expression(cur_token.text);
         next_token();
         unary();
     }
@@ -250,8 +266,10 @@ void Parser::unary() {
 
     // plus or minus
     if (is_cur_token(Token("+", PLUS))
-        || is_cur_token(Token("-", MINUS)))
+        || is_cur_token(Token("-", MINUS))) {
+        emitter->expression(cur_token.text);
         next_token();
+    }
 
     primary();
 }
@@ -263,13 +281,15 @@ void Parser::primary() {
 
 
     if (is_cur_token(Token("", IDENT))) {
-        if (identifier_is_declared())
+        if (identifier_is_declared()) {
+            emitter->expression(cur_token.text);
             next_token();
-        else
+        } else
             abort("Undeclared identifier " + cur_token.text);
-    } else if (is_cur_token(Token("", NUMBER)))
+    } else if (is_cur_token(Token("", NUMBER))) {
+        emitter->expression(cur_token.text);
         next_token();
-    else
+    } else
         abort("Expected identifier or number found " + cur_token.text);
 }
 
@@ -281,6 +301,8 @@ void Parser::newline() {
     if (!is_cur_token(Token("nl", NEWLINE))
         && !is_cur_token(Token("EOF", EOF)))
         abort("Expected new line found " + cur_token.text);
+
+    emitter->new_line();
 
     next_token();
 }
@@ -295,6 +317,8 @@ void Parser::comparison() {
     // comparison operators
     if (cur_token.kind > GTEQ || cur_token.kind < EQEQ)
         abort("Expected comparison operators found " + cur_token.text);
+
+    emitter->expression(cur_token.text);
     next_token();
 
     expression();

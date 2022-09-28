@@ -1,4 +1,5 @@
 let cnt = 10
 while cnt > 0 repeat
 output cnt
+cnt = cnt - 1
 endwhile

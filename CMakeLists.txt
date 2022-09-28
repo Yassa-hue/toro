@@ -3,4 +3,4 @@ project(toroProject)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(main.cpp Lexer.cpp Lexer.h Lexer_Test.cpp Lexer_Test.h)
+add_executable(main.cpp ./lexer/Lexer_Test.cpp ./lexer/Lexer_Test.h ./emitter/Emitter.cpp ./emitter/Emitter.h)
