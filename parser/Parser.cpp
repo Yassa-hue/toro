@@ -11,7 +11,7 @@
 #endif
 
 
-Parser::Parser(Lexer *__lexer) : lexer(__lexer), open_if(false) {
+Parser::Parser(Lexer *__lexer) : lexer(__lexer){
 
     test_log("starting parsing");
 
@@ -62,7 +62,12 @@ void Parser::abort(std::string __msg) const {
 }
 
 
-void Parser::match(Token __token) {
+bool Parser::identifier_is_declared() const {
+    return (declared_idents.find(cur_token.text) != declared_idents.end());
+}
+
+
+void Parser::match(Token __token, int __ident_checker = DONT_CHECK_IDENT) {
     /*
      * if the parser know what the current token should be use match
      */
@@ -70,6 +75,19 @@ void Parser::match(Token __token) {
     if (__token != cur_token)
         abort("Expected " + __token.text + "(" + to_string(__token.kind) + ")" +  " Found " + cur_token.text + "(" +
                       to_string(cur_token.kind) + ")");
+
+    // check if this identifier is already declared
+    if (cur_token.kind == IDENT && __ident_checker == CHECK_IDENT_DECLARED) {
+        if (!identifier_is_declared()) // error
+            abort("Undeclared identifier " + cur_token.text);
+    }
+
+    // check if this identifier is not declared
+    if (cur_token.kind == IDENT && __ident_checker == CHECK_IDENT_NOT_DECLARED) {
+        if (identifier_is_declared()) // error
+            abort("Declaring declared identifier");
+        declared_idents.insert(cur_token.text);
+    }
 
     next_token();
 }
@@ -150,7 +168,7 @@ void Parser::statement() {
 
         next_token();
 
-        match(Token("", IDENT));
+        match(Token("", IDENT), CHECK_IDENT_NOT_DECLARED);
         match(Token("=", EQ));
 
         expression();
@@ -162,13 +180,18 @@ void Parser::statement() {
         cout << "input statement" << endl;
 
         next_token();
-        match(Token("", IDENT));
+        match(Token("", IDENT), CHECK_IDENT_DECLARED);
     }
 
 
     // assigning statement : ident = expression
     else if (is_cur_token(Token("", IDENT))) {
         cout << "assigning statement" << endl;
+
+        // check id the identifier is declared
+        if (!identifier_is_declared())
+            abort("Undeclared identifier " + cur_token.text);
+
 
         next_token();
         match(Token("=", EQ));
@@ -238,10 +261,16 @@ void Parser::unary() {
 void Parser::primary() {
     test_log("calling primary on " + cur_token.text);
 
-    if (!is_cur_token(Token("", IDENT))
-        && !is_cur_token(Token("", NUMBER)))
+
+    if (is_cur_token(Token("", IDENT))) {
+        if (identifier_is_declared())
+            next_token();
+        else
+            abort("Undeclared identifier " + cur_token.text);
+    } else if (is_cur_token(Token("", NUMBER)))
+        next_token();
+    else
         abort("Expected identifier or number found " + cur_token.text);
-    next_token();
 }
 
 

@@ -3,6 +3,7 @@ let yassa = -3
 output yassa/2
 if 7.5 <= yassa then
 output "hey"
+let kero = yassa + -1
 while yassa != kero repeat
 output "fine"
 endwhile

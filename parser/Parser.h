@@ -8,14 +8,22 @@
 
 #include "../lexer/Lexer.h"
 
+#include <set>
+
+
+// identifier checker statuses
+#define DONT_CHECK_IDENT 0
+#define CHECK_IDENT_DECLARED 1 // check if ident is declared
+#define CHECK_IDENT_NOT_DECLARED 2 // check if ident is not declared
+
 
 class Parser {
 private:
     Lexer *lexer;
 
-    Token cur_token, peek_token;
+    set <string> declared_idents;
 
-    bool open_if;
+    Token cur_token, peek_token;
 
     void test_log(string s);
 
@@ -27,7 +35,9 @@ private:
 
     void abort(string __msg) const;
 
-    void match(Token __token);
+    bool identifier_is_declared() const;
+
+    void match(Token __token, int __ident_checker);
 
     void program();
 
