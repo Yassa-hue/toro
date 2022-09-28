@@ -4,15 +4,32 @@
 
 #include "Parser.h"
 
+#ifndef TESTING_LOG
+
+//#define TESTING_LOG
+
+#endif
+
 
 Parser::Parser(Lexer *__lexer) : lexer(__lexer), open_if(false) {
-    cout << "starting parsing" << endl;
+
+    test_log("starting parsing");
 
     // calling next_token() twice to fill the current and the peek token
     next_token();
     next_token();
 
     program();
+}
+
+
+void Parser::test_log(string __log_msg) {
+
+#ifdef TESTING_LOG
+
+    cout << __log_msg << endl;
+
+#endif
 }
 
 
@@ -68,7 +85,7 @@ void Parser::program() {
 
 
 void Parser::statement() {
-    // cout << "Calling statement on " << cur_token.text << ' ' << peek_token.text << endl;
+    test_log("Calling statement on " + cur_token.text + " " + peek_token.text);
 
     // Output statement : print expression | string
     if (is_cur_token(Token("keyword", OUTPUT))) {
@@ -125,20 +142,110 @@ void Parser::statement() {
     }
 
 
+    // Let statement : let ident = expression
+    else if (is_cur_token(Token("keyword", LET))) {
+        cout << "let statement" << endl;
+
+        next_token();
+
+        match(Token("ident", IDENT));
+        match(Token("=", EQ));
+
+        expression();
+    }
+
+
+    // input statement : input keyword
+    else if (is_cur_token(Token("keyword", INPUT))) {
+        cout << "input statement" << endl;
+
+        next_token();
+        match(Token("ident", IDENT));
+    }
+
+
+    // assigning statement : ident = expression
+    else if (is_cur_token(Token("keyword", INPUT))) {
+        cout << "assigning statement" << endl;
+
+        next_token();
+        match(Token("=", EQ));
+
+        next_token();
+        expression();
+    }
+
+    // invalid statement
+    else
+        abort("Invalid statement");
+
+
     newline();
 
 
 }
 
 
+
+// exp is term [(+|-)term]*
 void Parser::expression() {
 
+    test_log("calling expression on " + cur_token.text);
+
+    term();
+
+    // zero or more terms
+    while (is_cur_token(Token("+", PLUS))
+           || is_cur_token(Token("-", MINUS))) {
+
+        next_token();
+        term();
+    }
+}
+
+
+// term is unary [(*|/)unary]*
+void Parser::term () {
+    test_log("calling term on " + cur_token.text);
+
+    unary();
+
+    while (is_cur_token(Token("*", AST))
+           || is_cur_token(Token("/", SLASH))) {
+
+        next_token();
+        unary();
+    }
+}
+
+
+// unary is ±primary
+void Parser::unary() {
+    test_log("calling unary on " + cur_token.text);
+
+    // plus or minus
+    if (is_cur_token(Token("+", PLUS))
+        || is_cur_token(Token("-", MINUS)))
+        next_token();
+
+    primary();
+}
+
+
+// primary is num|ident
+void Parser::primary() {
+    test_log("calling primary on " + cur_token.text);
+
+    if (!is_cur_token(Token("ident", IDENT))
+        && !is_cur_token(Token("num", NUMBER)))
+        abort("Expected identifier or number found " + cur_token.text);
+    next_token();
 }
 
 
 void Parser::newline() {
     // Expects one or more newlines
-    // cout << "new line on " << cur_token.text << endl;
+    test_log("new line on " + cur_token.text);
 
     if (!is_cur_token(Token("nl", NEWLINE))
         && !is_cur_token(Token("EOF", EOF)))
@@ -148,26 +255,18 @@ void Parser::newline() {
 }
 
 
+// comparison is expression comp_op expression
 void Parser::comparison() {
-    // (ident | num) COMP_OP (ident | num)
+    test_log("comparison on " + cur_token.text);
 
-    // cout << "comparison on " << cur_token.text << endl;
-
-    if (!is_cur_token(Token("ident", IDENT)) && !is_cur_token(Token("NUM", NUMBER)))
-        abort("Expected identifier or number found " + cur_token.text);
-
-    next_token();
+    expression();
 
     // comparison operators
     if (cur_token.kind > GTEQ || cur_token.kind < EQEQ)
         abort("Expected comparison operators found " + cur_token.text);
-
     next_token();
 
-    if (!is_cur_token(Token("ident", IDENT)) && !is_cur_token(Token("NUM", NUMBER)))
-        abort("Expected identifier or number found " + cur_token.text);
-
-    next_token();
+    expression();
 
 }
 

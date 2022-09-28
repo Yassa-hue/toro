@@ -17,6 +17,8 @@ private:
 
     bool open_if;
 
+    void test_log(string s);
+
     void next_token();
 
     bool is_cur_token(Token __token) const;
@@ -32,6 +34,12 @@ private:
     void statement();
 
     void expression();
+
+    void term();
+
+    void unary();
+
+    void primary();
 
     void comparison();
 

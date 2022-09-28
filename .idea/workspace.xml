@@ -16,9 +16,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2d9ae4b7-2863-4dca-951b-a262cf14fc5b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/lexer/Lexer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lexer/Lexer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lexer/Lexer.o" beforeDir="false" afterPath="$PROJECT_DIR$/lexer/Lexer.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lexer/lexer_test0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lexer/lexer_test0.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/parser/Parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/parser/Parser.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/parser/Parser.h" beforeDir="false" afterPath="$PROJECT_DIR$/parser/Parser.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/parser/test0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/parser/test0.txt" afterDir="false" />
@@ -49,16 +47,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "last_opened_file_path": "/Users/yassa/CLionProjects/toroProject",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/yassa/CLionProjects/toroProject&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/lexer_tests" />
@@ -68,13 +66,6 @@
       <recent name="$PROJECT_DIR$/lexer" />
       <recent name="$PROJECT_DIR$/lexer_tests" />
     </key>
-  </component>
-  <component name="RunManager">
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -98,7 +89,8 @@
       <workItem from="1664044209835" duration="2427000" />
       <workItem from="1664098986885" duration="5000" />
       <workItem from="1664112882023" duration="4767000" />
-      <workItem from="1664127692173" duration="5685000" />
+      <workItem from="1664127692173" duration="10598000" />
+      <workItem from="1664370914564" duration="1983000" />
     </task>
     <servers />
   </component>

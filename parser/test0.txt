@@ -1,4 +1,5 @@
 output "hello world"
+let yassa = -3
 if 7.5 <= yassa then
 output "hey"
 while yassa != kero repeat
