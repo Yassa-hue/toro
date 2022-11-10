@@ -1,3 +1,4 @@
+output "hi yousif"
 let cnt = 10
 while cnt > 0 repeat
 output cnt

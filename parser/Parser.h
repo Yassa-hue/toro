@@ -10,6 +10,7 @@
 #include "../emitter/Emitter.h"
 
 #include <set>
+#include <vector>
 
 
 // identifier checker statuses
@@ -24,7 +25,7 @@ private:
 
     Emitter *emitter;
 
-    set <string> declared_idents;
+    vector <set <string> > scopes;
 
     Token cur_token, peek_token;
 
@@ -38,7 +39,13 @@ private:
 
     void abort(string __msg) const;
 
-    bool identifier_is_declared() const;
+    bool identifier_is_declared(const string &__ident_name) const;
+
+    void create_inner_scope();
+
+    void pop_out_scope();
+
+    void add_ident_to_curr_scope(const string &__ident_name);
 
     void match(Token __token, int __ident_checker);
 
