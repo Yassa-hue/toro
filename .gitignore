@@ -4,3 +4,4 @@
 ./object_files/
 *.o
 *.out
+CMakeLists.txt

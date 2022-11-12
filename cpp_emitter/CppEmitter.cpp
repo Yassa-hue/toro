@@ -2,100 +2,107 @@
 // Created by yassa on 28/09/2022.
 //
 
-#include "Emitter.h"
+#include "CppEmitter.h"
 
-Emitter::Emitter() : indentation_tabs(1), no_semicolon(false) {
-    output_file = new ofstream("./output.cpp");
-    (*output_file) << "#include <iostream>\nusing namespace std;\nint main () {\n";
+CppEmitter::CppEmitter(ostream * __output_stream) : Emitter(__output_stream), no_semicolon(false) {
+    // cpp code is in the main function so that the initial number of tabs is 1
+    indentation_tabs = 1;
+
+    (*output_stream) << "#include <iostream>\nusing namespace std;\nint main () {\n";
 }
 
 
 
-void Emitter::print_ind_tabs() {
+void CppEmitter::print_ind_tabs() {
     for (int i = 0; i < indentation_tabs; ++i) {
-        (*output_file) << '\t';
+        (*output_stream) << '\t';
     }
 }
 
 
-void Emitter::emit_file() {
-    (*output_file) << "\treturn 0;\n}";
-    output_file->close();
-    delete output_file;
+void CppEmitter::emit_file() {
+    (*output_stream) << "\treturn 0;\n}";
+    ((ofstream*)output_stream)->close();
+//    delete output_stream;
 }
 
-void Emitter::input_statement(const std::string &__var_name) {
-    (*output_file) << "cin >> " << __var_name;
-}
-
-
-
-void Emitter::output_statement_str(const std::string &__text) {
-    (*output_file) << "cout << \"" << __text << "\"" << " << endl";
+void CppEmitter::input_statement(const std::string &__var_name) {
+    (*output_stream) << "cin >> " << __var_name;
 }
 
 
-void Emitter::output_statement_num() {
-    (*output_file) << "cout << ";
+
+void CppEmitter::output_statement_str(const std::string &__text) {
+    (*output_stream) << "cout << \"" << __text << "\"" << " << endl";
 }
 
 
-void Emitter::assigning(const std::string &_var_name) {
-    (*output_file) << _var_name << " = ";
+void CppEmitter::output_statement_num() {
+    (*output_stream) << "cout << ";
 }
 
 
-void Emitter::new_line() {
+void CppEmitter::assigning(const std::string &_var_name) {
+    (*output_stream) << _var_name << " = ";
+}
+
+
+void CppEmitter::new_line() {
     if (no_semicolon)
         no_semicolon = false;
     else
-        (*output_file) << ";";
-    (*output_file) << "\n";
+        (*output_stream) << ";";
+    (*output_stream) << "\n";
 }
 
-void Emitter::start_if() {
-    (*output_file) << "if (";
+void CppEmitter::start_if() {
+    (*output_stream) << "if (";
 }
 
 
-void Emitter::then() {
-    (*output_file) << ") {";
+void CppEmitter::then() {
+    (*output_stream) << ") {";
     no_semicolon = true;
     indentation_tabs++;
 }
 
 
-void Emitter::end_if() {
+void CppEmitter::end_if() {
     indentation_tabs--;
     print_ind_tabs();
-    (*output_file) << "}";
+    (*output_stream) << "}";
     no_semicolon = true;
 }
 
 
-void Emitter::start_while() {
-    (*output_file) << "while (";
+void CppEmitter::start_while() {
+    (*output_stream) << "while (";
 }
 
-void Emitter::repeat() {
-    (*output_file) << ") {";
+void CppEmitter::repeat() {
+    (*output_stream) << ") {";
     indentation_tabs++;
     no_semicolon = true;
 }
 
-void Emitter::end_while() {
+void CppEmitter::end_while() {
     indentation_tabs--;
     print_ind_tabs();
-    (*output_file) << "}";
+    (*output_stream) << "}";
     no_semicolon = true;
 }
 
-void Emitter::create_var(const std::string &_var_name) {
-    (*output_file) << "double " << _var_name << " = ";
+void CppEmitter::create_var(const std::string &_var_name) {
+    (*output_stream) << "double " << _var_name << " = ";
 }
 
-void Emitter::expression(const std::string &_ex) {
-    (*output_file) << _ex;
+void CppEmitter::expression(const std::string &_ex) {
+    (*output_stream) << _ex;
+}
+
+
+void CppEmitter::end_print_expression() {
+    (*output_stream) << " << endl";
 }
 
 

@@ -1,23 +1,20 @@
 //
-// Created by yassa on 28/09/2022.
+// Created by yassa on 12/11/2022.
 //
 
-#ifndef TOROPROJECT_CPPEMITTER_H
-#define TOROPROJECT_CPPEMITTER_H
+#ifndef TOROPROJECT_PYHTONEMITTER_H
+#define TOROPROJECT_PYHTONEMITTER_H
 
+#include "../abstract_emitter/Emitter.h"
 #include <iostream>
 #include <fstream>
-#include "../abstract_emitter/Emitter.h"
-using namespace std;
 
 
-class CppEmitter : public Emitter {
-private:
-
-    bool no_semicolon;
+class PyhtonEmitter : public Emitter {
 
 public:
-    CppEmitter(ostream * __output_stream);
+
+    PyhtonEmitter(ostream * __output_stream);
 
     void print_ind_tabs() override;
 
@@ -50,11 +47,9 @@ public:
 
     void expression(const string &_ex) override;
 
-
     void end_print_expression() override;
-
 
 };
 
 
-#endif //TOROPROJECT_CPPEMITTER_H
+#endif //TOROPROJECT_PYHTONEMITTER_H

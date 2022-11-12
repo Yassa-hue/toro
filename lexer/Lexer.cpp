@@ -79,7 +79,7 @@ char Lexer::peek() {
 
 
 void Lexer::abort(string __msg) {
-    throw __msg;
+    throw "Lexer Error: " + __msg;
 }
 
 

@@ -151,7 +151,7 @@ void Parser::statement() {
             test_log("printing expression");
             emitter->output_statement_num();
             expression();
-            emitter->expression(" << endl");
+            emitter->end_print_expression();
         }
     }
 

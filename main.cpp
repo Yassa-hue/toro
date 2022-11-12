@@ -1,6 +1,7 @@
 #include "./lexer/Lexer.h"
 #include "./parser/Parser.h"
-#include "./emitter/Emitter.h"
+#include "./cpp_emitter/CppEmitter.h"
+#include "./python_emitter/PythonEmitter.h"
 
 
 
@@ -9,15 +10,33 @@ int main() {
 
     try {
         ifstream *input_file = new ifstream ("./input.toro");
-        Lexer *lexer = new Lexer(input_file);
-        Emitter *emitter = new Emitter();
-        Parser *parser = new Parser(lexer, emitter);
 
-        emitter->emit_file();
+        ofstream *output_cpp_file = new ofstream ("./output.cpp");
+        ofstream *output_python_file = new ofstream ("./output.py");
+
+        Lexer *lexer = new Lexer(input_file);
+
+        CppEmitter *cpp_emitter = new CppEmitter(output_cpp_file);
+
+        PyhtonEmitter *pyhton_emitter = new PyhtonEmitter(output_python_file);
+
+
+
+//        Parser *parser = new Parser(lexer, pyhton_emitter);
+//
+//        pyhton_emitter->emit_file();
+
+        Parser *parser = new Parser(lexer, cpp_emitter);
+
+        cpp_emitter->emit_file();
+
         delete input_file;
         delete lexer;
-        delete emitter;
+        delete pyhton_emitter;
+        delete cpp_emitter;
         delete parser;
+        delete output_cpp_file;
+        delete output_python_file;
     } catch (string msg) {
         cout << "ERROR ! " << msg << endl;
     }
