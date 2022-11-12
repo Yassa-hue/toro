@@ -4,11 +4,11 @@
 
 #include "Parser.h"
 
-#ifndef TESTING_LOG
-
-#define TESTING_LOG
-
-#endif
+//#ifndef TESTING_LOG
+//
+//#define TESTING_LOG
+//
+//#endif
 
 
 Parser::Parser(Lexer *__lexer, Emitter *__emitter) : lexer(__lexer), emitter(__emitter){
@@ -61,7 +61,7 @@ bool Parser::is_peek_token(Token __token) const {
 void Parser::abort(std::string __msg) const {
     // error handler
 
-    throw __msg;
+    throw "Parser Error : " + __msg;
 }
 
 
@@ -144,11 +144,11 @@ void Parser::statement() {
         next_token();
 
         if (is_cur_token(Token("", STRING))) {
-            cout << "printing text" << endl;
+            test_log("printing text");
             emitter->output_statement_str(cur_token.text);
             next_token();
         } else {
-            cout << "printing expression" << endl;
+            test_log("printing expression");
             emitter->output_statement_num();
             expression();
             emitter->expression(" << endl");
@@ -158,7 +158,7 @@ void Parser::statement() {
     // If statement : if comparison then
     else if (is_cur_token(Token("keyword", IF))) {
 
-        cout << "starting if statement" << endl;
+        test_log("starting if statement");
 
         emitter->start_if();
 
@@ -186,12 +186,12 @@ void Parser::statement() {
         // delete if statement inner scope
         pop_out_scope();
 
-        cout << "end if statement" << endl;
+        test_log("end if statement");
     }
 
     // while loop
     else if (is_cur_token(Token("keyword", WHILE))) {
-        cout << "starting while statement" << endl;
+        test_log("starting while statement");
 
         emitter->start_while();
 
@@ -220,24 +220,24 @@ void Parser::statement() {
         // delete while statement inner scope
         pop_out_scope();
 
-        cout << "end while statement" << endl;
+        test_log("end while statement");
     }
 
 
     // Let statement : let ident = expression
     else if (is_cur_token(Token("keyword", LET))) {
-        cout << "let statement" << endl;
+        test_log("let statement");
 
         next_token();
 
         emitter->create_var(cur_token.text);
 
-        // add this var to the current scope
-        add_ident_to_curr_scope(cur_token.text);
-
 
         match(Token("", IDENT), CHECK_IDENT_NOT_DECLARED);
         match(Token("=", EQ));
+
+        // add this var to the current scope
+        add_ident_to_curr_scope(cur_token.text);
 
         expression();
     }
@@ -245,7 +245,7 @@ void Parser::statement() {
 
     // input statement : input keyword
     else if (is_cur_token(Token("keyword", INPUT))) {
-        cout << "input statement" << endl;
+        test_log("input statement");
 
         next_token();
         emitter->input_statement(cur_token.text);
@@ -256,7 +256,7 @@ void Parser::statement() {
 
     // assigning statement : ident = expression
     else if (is_cur_token(Token("", IDENT))) {
-        cout << "assigning statement" << endl;
+        test_log("assigning statement");
 
         // check id the identifier is declared
         if (!identifier_is_declared(cur_token.text))

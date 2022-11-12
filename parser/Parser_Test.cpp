@@ -10,10 +10,12 @@ Parser_Test::Parser_Test(int __tests_num) {
         try {
             ifstream *input_file = new ifstream ("./test" + to_string(i) + ".txt");
             Lexer *l = new Lexer(input_file);
-            p = new Parser(l);
+            e = new Emitter(&cout);
+            p = new Parser(l, e);
             delete input_file;
             delete l;
             delete p;
+            delete e;
         } catch (string msg) {
             cout << msg << endl;
         }

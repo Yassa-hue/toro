@@ -1,6 +1,6 @@
-let cnt = 10
-while cnt > 0 repeat
-output cnt
-let res = 11
-endwhile
-output res
+let x = 8.0
+if x / 2 == 3 then
+output x
+let p = x / 2
+endif
+output p

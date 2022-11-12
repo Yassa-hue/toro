@@ -7,7 +7,7 @@
 
 
 #include "../lexer/Lexer.h"
-#include "../emitter/Emitter.h"
+#include "../abstract_emitter/Emitter.h"
 
 #include <set>
 #include <vector>

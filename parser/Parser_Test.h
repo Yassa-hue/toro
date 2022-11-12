@@ -10,7 +10,7 @@
 class Parser_Test {
 private:
     Parser *p;
-
+    Emitter *e;
 public:
     Parser_Test(int __tests_num);
 };
