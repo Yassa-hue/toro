@@ -8,9 +8,8 @@
 
 #include "../lexer/Lexer.h"
 #include "../abstract_emitter/Emitter.h"
+#include "../scope_manager/ScopeManager.h"
 
-#include <set>
-#include <vector>
 
 
 // identifier checker statuses
@@ -25,7 +24,7 @@ private:
 
     Emitter *emitter;
 
-    vector <set <string> > scopes;
+    ScopeManager *scope_manager;
 
     Token cur_token, peek_token;
 
@@ -38,14 +37,6 @@ private:
     bool is_peek_token(Token __token) const;
 
     void abort(string __msg) const;
-
-    bool identifier_is_declared(const string &__ident_name) const;
-
-    void create_inner_scope();
-
-    void pop_out_scope();
-
-    void add_ident_to_curr_scope(const string &__ident_name);
 
     void match(Token __token, int __ident_checker);
 
@@ -66,7 +57,7 @@ private:
     void newline();
 
 public:
-    Parser(Lexer *__lexer, Emitter * __emitter);
+    Parser(Lexer *__lexer, Emitter * __emitter, ScopeManager *__scope_manager);
 
 };
 

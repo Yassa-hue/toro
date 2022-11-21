@@ -115,12 +115,12 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "emitter/Emitter.cpp",
+			"path" : "cpp_emitter/CppEmitter.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"path" : "emitter/Emitter.h",
+			"path" : "cpp_emitter/CppEmitter.h",
 			"sourceGroupIndex" : 1
 		}
 	],

@@ -11,6 +11,7 @@ class Parser_Test {
 private:
     Parser *p;
     Emitter *e;
+    ScopeManager *sm;
 public:
     Parser_Test(int __tests_num);
 };

@@ -11,12 +11,13 @@
 //#endif
 
 
-Parser::Parser(Lexer *__lexer, Emitter *__emitter) : lexer(__lexer), emitter(__emitter){
+Parser::Parser(Lexer *__lexer, Emitter *__emitter, ScopeManager *__scope_manager) :
+        lexer(__lexer), emitter(__emitter) ,scope_manager(__scope_manager){
 
     test_log("starting parsing");
 
     // initialize the global scope
-    create_inner_scope();
+    scope_manager->create_inner_scope();
 
     // calling next_token() twice to fill the current and the peek token
     next_token();
@@ -65,40 +66,6 @@ void Parser::abort(std::string __msg) const {
 }
 
 
-bool Parser::identifier_is_declared(const string &__ident_name) const {
-    // searching for the identifier starting form the inner
-    //  scope and going out
-
-    for (int i = scopes.size() -1; i >= 0; --i) {
-        if (scopes[i].find(__ident_name) != scopes[i].end())
-            return true;
-    }
-
-    return false;
-}
-
-
-void Parser::create_inner_scope() {
-    // adds a knew scope on the top of scopes stack
-    // call it when interring a new inner scope
-
-    scopes.push_back(set<string>());
-}
-
-
-void Parser::pop_out_scope() {
-    // deleting the current scope
-    // call it when getting out of the current inner scope
-
-    scopes.pop_back();
-}
-
-
-void Parser::add_ident_to_curr_scope(const string &__ident_name) {
-
-    scopes.back().insert(__ident_name);
-}
-
 
 void Parser::match(Token __token, int __ident_checker = DONT_CHECK_IDENT) {
     /*
@@ -111,15 +78,15 @@ void Parser::match(Token __token, int __ident_checker = DONT_CHECK_IDENT) {
 
     // check if this identifier is already declared
     if (cur_token.kind == IDENT && __ident_checker == CHECK_IDENT_DECLARED) {
-        if (!identifier_is_declared(cur_token.text)) // error
+        if (!scope_manager->identifier_is_declared(cur_token.text)) // error
             abort("Undeclared identifier " + cur_token.text);
     }
 
     // check if this identifier is not declared
     if (cur_token.kind == IDENT && __ident_checker == CHECK_IDENT_NOT_DECLARED) {
-        if (identifier_is_declared(cur_token.text)) // error
+        if (scope_manager->identifier_is_declared(cur_token.text)) // error
             abort("Declaring declared identifier");
-        add_ident_to_curr_scope(cur_token.text);
+        scope_manager->add_ident_to_curr_scope(cur_token.text);
     }
 
     next_token();
@@ -173,7 +140,7 @@ void Parser::statement() {
 
 
         // start new scope for if statement
-        create_inner_scope();
+        scope_manager->create_inner_scope();
 
         // zero or more statements till reaching endif
         while (!is_cur_token(Token("keyword", ENDIF)))
@@ -184,7 +151,7 @@ void Parser::statement() {
         match(Token("keyword", ENDIF));
 
         // delete if statement inner scope
-        pop_out_scope();
+        scope_manager->pop_out_scope();
 
         test_log("end if statement");
     }
@@ -206,7 +173,7 @@ void Parser::statement() {
 
 
         // start new scope for while statement
-        create_inner_scope();
+        scope_manager->create_inner_scope();
 
         // zero or more statements till reaching endwhile
         while (!is_cur_token(Token("keyword", ENDWHILE)))
@@ -218,7 +185,7 @@ void Parser::statement() {
 
 
         // delete while statement inner scope
-        pop_out_scope();
+        scope_manager->pop_out_scope();
 
         test_log("end while statement");
     }
@@ -237,7 +204,7 @@ void Parser::statement() {
         match(Token("=", EQ));
 
         // add this var to the current scope
-        add_ident_to_curr_scope(cur_token.text);
+        scope_manager->add_ident_to_curr_scope(cur_token.text);
 
         expression();
     }
@@ -259,7 +226,7 @@ void Parser::statement() {
         test_log("assigning statement");
 
         // check id the identifier is declared
-        if (!identifier_is_declared(cur_token.text))
+        if (!scope_manager->identifier_is_declared(cur_token.text))
             abort("Undeclared identifier " + cur_token.text);
 
         emitter->assigning(cur_token.text);
@@ -335,7 +302,7 @@ void Parser::primary() {
 
 
     if (is_cur_token(Token("", IDENT))) {
-        if (identifier_is_declared(cur_token.text)) {
+        if (scope_manager->identifier_is_declared(cur_token.text)) {
             emitter->expression(cur_token.text);
             next_token();
         } else

@@ -20,13 +20,14 @@ int main() {
 
         PyhtonEmitter *pyhton_emitter = new PyhtonEmitter(output_python_file);
 
+        ScopeManager *scope_manager = new ScopeManager();
 
 
 //        Parser *parser = new Parser(lexer, pyhton_emitter);
 //
 //        pyhton_emitter->emit_file();
 
-        Parser *parser = new Parser(lexer, cpp_emitter);
+        Parser *parser = new Parser(lexer, cpp_emitter, scope_manager);
 
         cpp_emitter->emit_file();
 
@@ -35,6 +36,7 @@ int main() {
         delete pyhton_emitter;
         delete cpp_emitter;
         delete parser;
+        delete scope_manager;
         delete output_cpp_file;
         delete output_python_file;
     } catch (string msg) {

@@ -11,11 +11,13 @@ Parser_Test::Parser_Test(int __tests_num) {
             ifstream *input_file = new ifstream ("./test" + to_string(i) + ".txt");
             Lexer *l = new Lexer(input_file);
             e = new Emitter(&cout);
-            p = new Parser(l, e);
+            sm = new ScopeManager();
+            p = new Parser(l, e, sm);
             delete input_file;
             delete l;
             delete p;
             delete e;
+            delete sm;
         } catch (string msg) {
             cout << msg << endl;
         }
