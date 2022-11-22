@@ -10,9 +10,15 @@ Parser_Test::Parser_Test(int __tests_num) {
         try {
             ifstream *input_file = new ifstream ("./test" + to_string(i) + ".txt");
             Lexer *l = new Lexer(input_file);
-            e = new Emitter(&cout);
+
             sm = new ScopeManager();
-            p = new Parser(l, e, sm);
+            p = new Parser(l, sm);
+
+            const vector<EmitQuery> &eq = p->getAST();
+
+            e = new Emitter(&cout, eq);
+
+            e->proccessAST();
             delete input_file;
             delete l;
             delete p;

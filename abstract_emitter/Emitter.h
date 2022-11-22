@@ -7,6 +7,8 @@
 
 #include <iostream>
 #include <map>
+#include <vector>
+#include "../parser/Emiter_Query.h"
 
 using namespace std;
 
@@ -15,10 +17,10 @@ class Emitter {
 protected:
     ostream *output_stream;
 
+    const vector <EmitQuery> &ast;
+
     int indentation_tabs;
 
-public:
-    Emitter(ostream * __output_stream);
 
     virtual void print_ind_tabs();
 
@@ -51,6 +53,13 @@ public:
     virtual void expression(const string &_ex);
 
     virtual void end_print_expression();
+
+public:
+    Emitter(ostream * __output_stream, const vector <EmitQuery> &__ast);
+
+
+    void proccessAST();
+
 };
 
 

@@ -16,9 +16,6 @@ private:
 
     bool no_semicolon;
 
-public:
-    CppEmitter(ostream * __output_stream);
-
     void print_ind_tabs() override;
 
 
@@ -52,6 +49,11 @@ public:
 
 
     void end_print_expression() override;
+
+
+public:
+    CppEmitter(ostream * __output_stream, const vector <EmitQuery> &__ast);
+
 
 
 };

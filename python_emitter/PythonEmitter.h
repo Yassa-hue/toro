@@ -12,10 +12,6 @@
 
 class PyhtonEmitter : public Emitter {
 
-public:
-
-    PyhtonEmitter(ostream * __output_stream);
-
     void print_ind_tabs() override;
 
 
@@ -48,6 +44,10 @@ public:
     void expression(const string &_ex) override;
 
     void end_print_expression() override;
+
+public:
+
+    PyhtonEmitter(ostream * __output_stream, const vector <EmitQuery> &__ast);
 
 };
 

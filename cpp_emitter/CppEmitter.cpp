@@ -4,7 +4,7 @@
 
 #include "CppEmitter.h"
 
-CppEmitter::CppEmitter(ostream * __output_stream) : Emitter(__output_stream), no_semicolon(false) {
+CppEmitter::CppEmitter(ostream * __output_stream, const vector <EmitQuery> &__ast) : Emitter(__output_stream, __ast), no_semicolon(false) {
     // cpp code is in the main function so that the initial number of tabs is 1
     indentation_tabs = 1;
 

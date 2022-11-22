@@ -3,4 +3,4 @@ if x / 2 == 3 then
 output x
 let p = x / 2
 endif
-output p
+output x

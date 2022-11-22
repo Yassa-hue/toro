@@ -1,27 +1,27 @@
 # Compile the test source code
 
 # compile lexer class
-g++ -c ../lexer/Lexer.cpp -o lexer.o
+g++ -std=c++20 -c ../lexer/Lexer.cpp -o lexer.o
 
 
 # compile the abstract emitter class
-g++ -c ../abstract_emitter/Emitter.cpp -o emitter.o
+g++ -std=c++20 -c ../abstract_emitter/Emitter.cpp -o emitter.o
 
 
 # compile the scope manager class
-g++ -c ../scope_manager/ScopeManager.cpp -o scope_manager.o
+g++ -std=c++20 -c ../scope_manager/ScopeManager.cpp -o scope_manager.o
 
 
 # compile the parser class
-g++ -c ./Parser.cpp -o parser.o
+g++ -std=c++20 -c ./Parser.cpp -o parser.o
 
 
 # compile the parser test class
-g++ -c ./Parser_Test.cpp -o parser_test.o
+g++ -std=c++20 -c ./Parser_Test.cpp -o parser_test.o
 
 
 # compile the main test file
-g++ -c ./main.cpp -o main.o
+g++ -std=c++20 -c ./main.cpp -o main.o
 
 
 

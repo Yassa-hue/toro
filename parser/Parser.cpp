@@ -11,8 +11,8 @@
 //#endif
 
 
-Parser::Parser(Lexer *__lexer, Emitter *__emitter, ScopeManager *__scope_manager) :
-        lexer(__lexer), emitter(__emitter) ,scope_manager(__scope_manager){
+Parser::Parser(Lexer *__lexer, ScopeManager *__scope_manager) :
+        lexer(__lexer), scope_manager(__scope_manager){
 
     test_log("starting parsing");
 
@@ -105,20 +105,20 @@ void Parser::program() {
 void Parser::statement() {
     test_log("Calling statement on " + cur_token.text + " " + peek_token.text);
 
-    emitter->print_ind_tabs();
+    ast.push_back({PRINT_IND_TABS, ""});
     // Output statement : print expression | string
     if (is_cur_token(Token("keyword", OUTPUT))) {
         next_token();
 
         if (is_cur_token(Token("", STRING))) {
             test_log("printing text");
-            emitter->output_statement_str(cur_token.text);
+            ast.push_back({OUTPUT_STATEMENT_STR, cur_token.text});
             next_token();
         } else {
             test_log("printing expression");
-            emitter->output_statement_num();
+            ast.push_back({OUTPUT_STATEMENT_NUM, ""});
             expression();
-            emitter->end_print_expression();
+            ast.push_back({END_PRINT_EXPRESSION, ""});
         }
     }
 
@@ -127,14 +127,14 @@ void Parser::statement() {
 
         test_log("starting if statement");
 
-        emitter->start_if();
+        ast.push_back({START_IF_EXP, ""});
 
         // comparison
         next_token();
         comparison();
 
         // then keyword
-        emitter->then();
+        ast.push_back({THEN_EXP, ""});
         match(Token("keyword", THEN));
         newline();
 
@@ -147,7 +147,7 @@ void Parser::statement() {
             statement();
 
         // endif
-        emitter->end_if();
+        ast.push_back({END_IF_EXP, ""});
         match(Token("keyword", ENDIF));
 
         // delete if statement inner scope
@@ -160,7 +160,7 @@ void Parser::statement() {
     else if (is_cur_token(Token("keyword", WHILE))) {
         test_log("starting while statement");
 
-        emitter->start_while();
+        ast.push_back({START_WHILE_EXP, ""});
 
         // comparison
         next_token();
@@ -168,7 +168,7 @@ void Parser::statement() {
 
         // repeat keyword
         match(Token("keyword", REPEAT));
-        emitter->repeat();
+        ast.push_back({REPEAT_EXP, ""});
         newline();
 
 
@@ -180,7 +180,7 @@ void Parser::statement() {
             statement();
 
         // endwhile
-        emitter->end_while();
+        ast.push_back({END_WHILE_EXP, ""});
         match(Token("keyword", ENDWHILE));
 
 
@@ -197,7 +197,7 @@ void Parser::statement() {
 
         next_token();
 
-        emitter->create_var(cur_token.text);
+        ast.push_back({CREATE_VAR, ""});
 
 
         match(Token("", IDENT), CHECK_IDENT_NOT_DECLARED);
@@ -215,7 +215,7 @@ void Parser::statement() {
         test_log("input statement");
 
         next_token();
-        emitter->input_statement(cur_token.text);
+        ast.push_back({INPUT_STATEMENT, cur_token.text});
         match(Token("", IDENT), CHECK_IDENT_DECLARED);
 
     }
@@ -229,7 +229,7 @@ void Parser::statement() {
         if (!scope_manager->identifier_is_declared(cur_token.text))
             abort("Undeclared identifier " + cur_token.text);
 
-        emitter->assigning(cur_token.text);
+        ast.push_back({ASSIGNING_EXP, cur_token.text});
 
         next_token();
         match(Token("=", EQ));
@@ -259,7 +259,7 @@ void Parser::expression() {
     // zero or more terms
     while (is_cur_token(Token("+", PLUS))
            || is_cur_token(Token("-", MINUS))) {
-        emitter->expression(cur_token.text);
+        ast.push_back({EXPRESSION_EXP, cur_token.text});
         next_token();
         term();
     }
@@ -274,7 +274,7 @@ void Parser::term () {
 
     while (is_cur_token(Token("*", AST))
            || is_cur_token(Token("/", SLASH))) {
-        emitter->expression(cur_token.text);
+        ast.push_back({EXPRESSION_EXP, cur_token.text});
         next_token();
         unary();
     }
@@ -288,7 +288,7 @@ void Parser::unary() {
     // plus or minus
     if (is_cur_token(Token("+", PLUS))
         || is_cur_token(Token("-", MINUS))) {
-        emitter->expression(cur_token.text);
+        ast.push_back({EXPRESSION_EXP, cur_token.text});
         next_token();
     }
 
@@ -303,12 +303,12 @@ void Parser::primary() {
 
     if (is_cur_token(Token("", IDENT))) {
         if (scope_manager->identifier_is_declared(cur_token.text)) {
-            emitter->expression(cur_token.text);
+            ast.push_back({EXPRESSION_EXP, cur_token.text});
             next_token();
         } else
             abort("Undeclared identifier " + cur_token.text);
     } else if (is_cur_token(Token("", NUMBER))) {
-        emitter->expression(cur_token.text);
+        ast.push_back({EXPRESSION_EXP, cur_token.text});
         next_token();
     } else
         abort("Expected identifier or number found " + cur_token.text);
@@ -323,7 +323,7 @@ void Parser::newline() {
         && !is_cur_token(Token("EOF", EOF)))
         abort("Expected new line found " + cur_token.text);
 
-    emitter->new_line();
+    ast.push_back({NEW_LINE_EXP, ""});
 
     next_token();
 }
@@ -339,11 +339,16 @@ void Parser::comparison() {
     if (cur_token.kind > GTEQ || cur_token.kind < EQEQ)
         abort("Expected comparison operators found " + cur_token.text);
 
-    emitter->expression(cur_token.text);
+    ast.push_back({EXPRESSION_EXP, cur_token.text});
     next_token();
 
     expression();
 
+}
+
+
+const vector<EmitQuery> &Parser::getAST() const {
+    return ast;
 }
 
 

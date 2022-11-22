@@ -16,9 +16,6 @@ int main() {
 
         Lexer *lexer = new Lexer(input_file);
 
-        CppEmitter *cpp_emitter = new CppEmitter(output_cpp_file);
-
-        PyhtonEmitter *pyhton_emitter = new PyhtonEmitter(output_python_file);
 
         ScopeManager *scope_manager = new ScopeManager();
 
@@ -27,9 +24,15 @@ int main() {
 //
 //        pyhton_emitter->emit_file();
 
-        Parser *parser = new Parser(lexer, cpp_emitter, scope_manager);
+        Parser *parser = new Parser(lexer, scope_manager);
 
-        cpp_emitter->emit_file();
+
+        const vector<EmitQuery> &ast = parser->getAST();
+
+
+        CppEmitter *cpp_emitter = new CppEmitter(output_cpp_file, ast);
+
+        PyhtonEmitter *pyhton_emitter = new PyhtonEmitter(output_python_file, ast);
 
         delete input_file;
         delete lexer;

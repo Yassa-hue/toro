@@ -5,7 +5,7 @@
 #include "PythonEmitter.h"
 
 
-PyhtonEmitter::PyhtonEmitter (ostream * __output_stream) : Emitter(__output_stream) {
+PyhtonEmitter::PyhtonEmitter (ostream * __output_stream, const vector <EmitQuery> &__ast) : Emitter(__output_stream, __ast) {
     (*output_stream) << "# Compiled toro code\n";
 }
 

@@ -9,7 +9,7 @@
 #include "../lexer/Lexer.h"
 #include "../abstract_emitter/Emitter.h"
 #include "../scope_manager/ScopeManager.h"
-
+#include "./Emiter_Query.h"
 
 
 // identifier checker statuses
@@ -22,11 +22,11 @@ class Parser {
 private:
     Lexer *lexer;
 
-    Emitter *emitter;
-
     ScopeManager *scope_manager;
 
     Token cur_token, peek_token;
+
+    vector <EmitQuery> ast;
 
     void test_log(string s);
 
@@ -56,8 +56,11 @@ private:
 
     void newline();
 
+
 public:
-    Parser(Lexer *__lexer, Emitter * __emitter, ScopeManager *__scope_manager);
+    Parser(Lexer *__lexer, ScopeManager *__scope_manager);
+
+    const vector <EmitQuery> & getAST() const;
 
 };
 

@@ -7,9 +7,120 @@
 
 
 
-Emitter::Emitter(ostream * __output_stream) : indentation_tabs(0), output_stream(__output_stream) {
+Emitter::Emitter(ostream * __output_stream, const vector <EmitQuery> &__ast) : indentation_tabs(0), output_stream(__output_stream), ast(__ast) {
     cout << "starting emitter" << endl;
 }
+
+
+
+
+
+
+
+void Emitter::proccessAST() {
+
+
+    for (const EmitQuery &query : ast) {
+
+        const int &type = query.type;
+
+        switch (type) {
+
+            case PRINT_IND_TABS: {
+                print_ind_tabs();
+                break;
+            }
+
+            case OUTPUT_STATEMENT_STR: {
+                output_statement_str(query.args);
+                break;
+            }
+
+            case OUTPUT_STATEMENT_NUM: {
+                output_statement_num();
+                break;
+            }
+
+            case END_PRINT_EXPRESSION: {
+                end_print_expression();
+                break;
+            }
+
+            case START_IF_EXP: {
+                start_if();
+                break;
+            }
+
+            case THEN_EXP: {
+                then();
+                break;
+            }
+
+            case END_IF_EXP: {
+                end_if();
+                break;
+            }
+
+            case START_WHILE_EXP: {
+                start_while();
+                break;
+            }
+
+            case REPEAT_EXP: {
+                repeat();
+                break;
+            }
+
+            case END_WHILE_EXP: {
+                end_while();
+                break;
+            }
+
+            case CREATE_VAR: {
+                create_var(query.args);
+                break;
+            }
+
+            case INPUT_STATEMENT: {
+                input_statement(query.args);
+                break;
+            }
+
+            case ASSIGNING_EXP: {
+                assigning(query.args);
+                break;
+            }
+
+            case EXPRESSION_EXP: {
+                expression(query.args);
+                break;
+            }
+
+            case NEW_LINE_EXP: {
+                new_line();
+                break;
+            }
+
+            default:
+                throw "Invalid Emit Query";
+        }
+
+        
+
+
+
+
+
+    }
+
+
+}
+
+
+
+
+
+
 
 void Emitter::print_ind_tabs() {
     for (int i = 0; i < indentation_tabs; ++i) {
