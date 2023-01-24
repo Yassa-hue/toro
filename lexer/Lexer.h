@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <vector>
 #include "./Token.h"
 
 
@@ -26,6 +27,7 @@ private:
 
     bool check_nl;
 
+    vector <Token> output_tokens;
 
     bool is_alpha(char __c) const;
 
@@ -33,12 +35,19 @@ private:
 
     int keyword_val(const string &str) const;
 
+    bool next_token_is_new_line();
+    
+    bool next_token_is_EOF();
+    
+    bool next_token_is_arithmatic_operator();
+    
+    bool next_token_is_logic_operator();
 
-public:
+    bool next_token_is_string();
 
-    Lexer();
+    bool next_token_is_number();
 
-    Lexer(ifstream *__input_stream);
+    bool next_token_is_identifier_or_keyword();
 
 
     void next_char();
@@ -51,7 +60,13 @@ public:
 
     void skip_commit();
 
-    Token get_token();
+    void lex_next_token();
+
+public:
+
+    Lexer(ifstream *__input_stream);
+
+    vector <Token> generate_token_vector();
 };
 
 

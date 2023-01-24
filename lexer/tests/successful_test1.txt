@@ -1,0 +1,4 @@
+output "yassa "
+let y = -45.09
+if y != y then
+while y == iff
