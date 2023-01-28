@@ -1,0 +1,4 @@
+let x = 10
+while x >! 0 repeat
+output x * x
+endwhile

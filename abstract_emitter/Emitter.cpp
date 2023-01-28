@@ -105,14 +105,9 @@ void Emitter::proccessAST() {
                 throw "Invalid Emit Query";
         }
 
-        
-
-
-
-
-
     }
 
+    (*output_stream) << "}";
 
 }
 

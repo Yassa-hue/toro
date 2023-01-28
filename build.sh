@@ -1,35 +1,42 @@
 # Compile the source code
 
-# Object files dir
-obj_files_path="./object_files"
-
 # Lexer files
-g++ -std=c++20 -c ./lexer/Lexer.cpp -o $obj_files_path/Lexer.o
+g++ -std=c++20 -c ./lexer/Lexer.cpp -o Lexer.o
 
 # Parser files
-g++ -std=c++20 -c ./parser/Parser.cpp -o $obj_files_path/Parser.o
+g++ -std=c++20 -c ./parser/Parser.cpp -o Parser.o
 
 
 # Scope manager files
-g++ -std=c++20 -c ./scope_manager/ScopeManager.cpp -o $obj_files_path/scope_manager.o
-
+g++ -std=c++20 -c ./scope_manager/ScopeManager.cpp -o scope_manager.o
 
 
 # Abstract emitter files
-g++ -std=c++20 -c ./abstract_emitter/Emitter.cpp -o $obj_files_path/Emitter.o
+g++ -std=c++20 -c ./abstract_emitter/Emitter.cpp -o Emitter.o
 
 
 # Python emitter files
-g++ -std=c++20 -c ./python_emitter/PythonEmitter.cpp -o $obj_files_path/PythonEmitter.o
+g++ -std=c++20 -c ./python_emitter/PythonEmitter.cpp -o PythonEmitter.o
 
 
 # Cpp emitter files
-g++ -std=c++20 -c ./cpp_emitter/CppEmitter.cpp -o $obj_files_path/CppEmitter.o
+g++ -std=c++20 -c ./cpp_emitter/CppEmitter.cpp -o CppEmitter.o
+
+
+# Compilation error files
+g++ -std=c++20 -c ./compilation_error/CompilationError.cpp -o compilation_error.o
+
+
+# Compilation error files
+g++ -std=c++20 -c ./token_iterator/TokenIterator.cpp -o token_iterator.o
 
 
 # Main file
-g++ -std=c++20 -c main.cpp -o $obj_files_path/main.o
+g++ -std=c++20 -c main.cpp -o main.o
 
 # Link the object files
-g++ $obj_files_path/main.o $obj_files_path/Lexer.o $obj_files_path/Parser.o $obj_files_path/Emitter.o $obj_files_path/PythonEmitter.o $obj_files_path/CppEmitter.o $obj_files_path/scope_manager.o
+g++ main.o Lexer.o Parser.o Emitter.o PythonEmitter.o CppEmitter.o scope_manager.o compilation_error.o token_iterator.o
 
+
+# clean the environment after compiling
+rm *.o
