@@ -75,7 +75,7 @@ char Lexer::peek() {
 
 
 void Lexer::abort(string __msg) {
-    throw "Lexer Error: " + __msg;
+    throw LexerError("Lexer Error: " + __msg);
 }
 
 

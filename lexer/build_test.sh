@@ -1,17 +1,19 @@
 # Compile the test source code
 
-# Object files dir
-obj_files_path="."
 
-class_name="Lexer"
+# Compilation error class
+g++ -std=c++20 -c ../compilation_error/CompilationError.cpp -o compilation_error.o
 
 
 # lexer file
-g++ -std=c++20 -c ./"$class_name".cpp -o $obj_files_path/"$class_name".o
+g++ -std=c++20 -c ./Lexer.cpp -o lexer.o
 
 
 # Main file
-g++ -std=c++20 -c main.cpp -o $obj_files_path/main.o
+g++ -std=c++20 -c main.cpp -o main.o
 
 # Link the object files
-g++ -std=c++20 $obj_files_path/main.o  $obj_files_path/"$class_name".o
+g++ -std=c++20 main.o  lexer.o  compilation_error.o
+
+# clean the environment after compilation
+rm *.o

@@ -10,9 +10,19 @@
 #include <map>
 #include <vector>
 #include "./Token.h"
+#include "../compilation_error/CompilationError.h"
 
 
 using namespace std;
+
+
+class LexerError : public CompilationError{
+public:
+    LexerError(string __error_msg) : CompilationError(__error_msg) {
+
+    }
+
+};
 
 
 

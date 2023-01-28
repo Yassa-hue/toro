@@ -58,16 +58,16 @@ void successful_test(const SuccessfulTestCase &test_case) {
             cout << to_string(test_output.size()) + " " + to_string (test_case.output_tokens.size()) << endl;
             for (const auto &token : test_output)
                 cout << token.text << ' ' << token.kind << endl;
-            throw string("Test Error : the test generated different number of tokens");
+            throw LexerTestError("Test Error : the test generated different number of tokens");
         }
         for (int i = 0; i < test_output.size(); ++i)
             if (test_output[i] != test_case.output_tokens[i])
-                throw string("Test Error : expected " + test_case.output_tokens[i].text + " got " + test_output[i].text);
+                throw LexerTestError("Test Error : expected " + test_case.output_tokens[i].text + " got " + test_output[i].text);
 
         cout << "[ Test Passed ] test name : " + test_case.name + " , test number : " + to_string(test_case.number);
 
-    } catch (string err) {
-        cout << "[ Test Failed ] test name : " + test_case.name + " , test number : " + to_string(test_case.number) + "\n\t => " + err;
+    } catch (CompilationError err) {
+        cout << "[ Test Failed ] test name : " + test_case.name + " , test number : " + to_string(test_case.number) + "\n\t => " + err.get_error_msg();
     }
 
     delete input_file;
@@ -89,8 +89,8 @@ void failing_test(const FailingTestCase &test_case) {
         vector<Token> test_output = lexer->generate_token_vector();
 
         cout << "[ Test Failed ] test name : " + test_case.name + " , test number : " + to_string(test_case.number) + "\n\t => " + "this test should fail";
-    } catch (string err) {
-        cout << "[ Test Passed ] test name : " + test_case.name + " , test number : " + to_string(test_case.number) + "\n\t => " + err;
+    } catch (CompilationError err) {
+        cout << "[ Test Passed ] test name : " + test_case.name + " , test number : " + to_string(test_case.number) + "\n\t => " + err.get_error_msg();
     }
 
     delete input_file;

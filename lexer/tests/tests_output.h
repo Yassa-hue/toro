@@ -50,3 +50,12 @@ vector <Token> successful_test_1_output = {
     Token("iff", IDENT),
     Token("EOF", EOF)
 };
+
+
+
+class LexerTestError : public CompilationError {
+public:
+    LexerTestError(string __error_msg) : CompilationError(__error_msg) {
+
+    }
+};
