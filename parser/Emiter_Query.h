@@ -36,6 +36,18 @@ struct EmitQuery {
 public:
     int type;
     string args;
+
+    EmitQuery (int __type, string __args) : type(__type), args(__args) {
+        
+    }
+
+    bool operator == (EmitQuery emit_query) {
+        return type == emit_query.type && args == emit_query.args;
+    }
+
+    bool operator != (EmitQuery emit_query) {
+        return !this->operator==(emit_query);
+    }
 };
 
 

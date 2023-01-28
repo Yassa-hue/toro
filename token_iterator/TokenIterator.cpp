@@ -17,7 +17,7 @@ bool TokenIterator::hasNext() const {
 
 Token TokenIterator::getNext() {
     if (!hasNext())
-        throw "Calling get on an empty iterator";
+        throw TokenIteratorError("Calling get on an empty iterator");
 
     lastToken++;
 

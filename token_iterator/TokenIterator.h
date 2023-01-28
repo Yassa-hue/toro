@@ -6,7 +6,23 @@
 #define TOROPROJECT_TOKENITERATOR_H
 
 #include "../lexer/Token.h"
+#include "../compilation_error/CompilationError.h"
 #include "vector"
+
+
+
+
+class TokenIteratorError : public CompilationError {
+public:
+    TokenIteratorError(string __error_msg) : CompilationError(__error_msg) {
+
+    }
+};
+
+
+
+
+
 
 class TokenIterator {
 private:

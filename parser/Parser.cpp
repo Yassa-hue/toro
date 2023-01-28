@@ -11,8 +11,8 @@
 //#endif
 
 
-Parser::Parser(Lexer *__lexer, ScopeManager *__scope_manager) :
-        lexer(__lexer), scope_manager(__scope_manager){
+Parser::Parser(TokenIterator *__tokens_iterator, ScopeManager *__scope_manager) :
+        tokens_iterator(__tokens_iterator), scope_manager(__scope_manager){
 
     test_log("starting parsing");
 
@@ -20,10 +20,8 @@ Parser::Parser(Lexer *__lexer, ScopeManager *__scope_manager) :
     scope_manager->create_inner_scope();
 
     // calling next_token() twice to fill the current and the peek token
-    next_token();
-    next_token();
-
-    program();
+    move_to_next_token();
+    move_to_next_token();
 }
 
 
@@ -37,11 +35,12 @@ void Parser::test_log(string __log_msg) {
 }
 
 
-void Parser::next_token() {
+void Parser::move_to_next_token() {
     // gets the next token form the lexer
 
     cur_token = peek_token;
-    peek_token = lexer->get_token();
+    if (tokens_iterator->hasNext())
+        peek_token = tokens_iterator->getNext();
 }
 
 
@@ -59,21 +58,21 @@ bool Parser::is_peek_token(Token __token) const {
 }
 
 
-void Parser::abort(std::string __msg) const {
+void Parser::abort(string __msg) const {
     // error handler
 
-    throw "Parser Error : " + __msg;
+    throw ParserError("Parser Error : " + __msg);
 }
 
 
 
-void Parser::match(Token __token, int __ident_checker = DONT_CHECK_IDENT) {
+void Parser::match(Token __should_be_token, int __ident_checker = DONT_CHECK_IDENT) {
     /*
      * if the parser know what the current token should be use match
      */
 
-    if (__token != cur_token)
-        abort("Expected " + __token.text + "(" + to_string(__token.kind) + ")" +  " Found " + cur_token.text + "(" +
+    if (__should_be_token != cur_token)
+        abort("Expected " + __should_be_token.text + "(" + to_string(__should_be_token.kind) + ")" +  " Found " + cur_token.text + "(" +
                       to_string(cur_token.kind) + ")");
 
     // check if this identifier is already declared
@@ -89,7 +88,6 @@ void Parser::match(Token __token, int __ident_checker = DONT_CHECK_IDENT) {
         scope_manager->add_ident_to_curr_scope(cur_token.text);
     }
 
-    next_token();
 }
 
 
@@ -103,17 +101,17 @@ void Parser::program() {
 
 
 void Parser::statement() {
-    test_log("Calling statement on " + cur_token.text + " " + peek_token.text);
+    // test_log("Calling statement on " + cur_token.text + " " + peek_token.text);
 
     ast.push_back({PRINT_IND_TABS, ""});
     // Output statement : print expression | string
     if (is_cur_token(Token("keyword", OUTPUT))) {
-        next_token();
+        move_to_next_token();
 
         if (is_cur_token(Token("", STRING))) {
             test_log("printing text");
             ast.push_back({OUTPUT_STATEMENT_STR, cur_token.text});
-            next_token();
+            move_to_next_token();
         } else {
             test_log("printing expression");
             ast.push_back({OUTPUT_STATEMENT_NUM, ""});
@@ -130,12 +128,13 @@ void Parser::statement() {
         ast.push_back({START_IF_EXP, ""});
 
         // comparison
-        next_token();
+        move_to_next_token();
         comparison();
 
         // then keyword
         ast.push_back({THEN_EXP, ""});
         match(Token("keyword", THEN));
+        move_to_next_token();
         newline();
 
 
@@ -149,6 +148,7 @@ void Parser::statement() {
         // endif
         ast.push_back({END_IF_EXP, ""});
         match(Token("keyword", ENDIF));
+        move_to_next_token();
 
         // delete if statement inner scope
         scope_manager->pop_out_scope();
@@ -163,11 +163,12 @@ void Parser::statement() {
         ast.push_back({START_WHILE_EXP, ""});
 
         // comparison
-        next_token();
+        move_to_next_token();
         comparison();
 
         // repeat keyword
         match(Token("keyword", REPEAT));
+        move_to_next_token();
         ast.push_back({REPEAT_EXP, ""});
         newline();
 
@@ -182,6 +183,7 @@ void Parser::statement() {
         // endwhile
         ast.push_back({END_WHILE_EXP, ""});
         match(Token("keyword", ENDWHILE));
+        move_to_next_token();
 
 
         // delete while statement inner scope
@@ -195,13 +197,14 @@ void Parser::statement() {
     else if (is_cur_token(Token("keyword", LET))) {
         test_log("let statement");
 
-        next_token();
-
-        ast.push_back({CREATE_VAR, ""});
-
+        move_to_next_token();
 
         match(Token("", IDENT), CHECK_IDENT_NOT_DECLARED);
+        ast.push_back({CREATE_VAR, cur_token.text});
+        move_to_next_token();
+
         match(Token("=", EQ));
+        move_to_next_token();
 
         // add this var to the current scope
         scope_manager->add_ident_to_curr_scope(cur_token.text);
@@ -214,9 +217,10 @@ void Parser::statement() {
     else if (is_cur_token(Token("keyword", INPUT))) {
         test_log("input statement");
 
-        next_token();
+        move_to_next_token();
         ast.push_back({INPUT_STATEMENT, cur_token.text});
         match(Token("", IDENT), CHECK_IDENT_DECLARED);
+        move_to_next_token();
 
     }
 
@@ -231,8 +235,9 @@ void Parser::statement() {
 
         ast.push_back({ASSIGNING_EXP, cur_token.text});
 
-        next_token();
+        move_to_next_token();
         match(Token("=", EQ));
+        move_to_next_token();
 
         expression();
     }
@@ -260,7 +265,7 @@ void Parser::expression() {
     while (is_cur_token(Token("+", PLUS))
            || is_cur_token(Token("-", MINUS))) {
         ast.push_back({EXPRESSION_EXP, cur_token.text});
-        next_token();
+        move_to_next_token();
         term();
     }
 }
@@ -275,7 +280,7 @@ void Parser::term () {
     while (is_cur_token(Token("*", AST))
            || is_cur_token(Token("/", SLASH))) {
         ast.push_back({EXPRESSION_EXP, cur_token.text});
-        next_token();
+        move_to_next_token();
         unary();
     }
 }
@@ -289,7 +294,7 @@ void Parser::unary() {
     if (is_cur_token(Token("+", PLUS))
         || is_cur_token(Token("-", MINUS))) {
         ast.push_back({EXPRESSION_EXP, cur_token.text});
-        next_token();
+        move_to_next_token();
     }
 
     primary();
@@ -304,12 +309,12 @@ void Parser::primary() {
     if (is_cur_token(Token("", IDENT))) {
         if (scope_manager->identifier_is_declared(cur_token.text)) {
             ast.push_back({EXPRESSION_EXP, cur_token.text});
-            next_token();
+            move_to_next_token();
         } else
             abort("Undeclared identifier " + cur_token.text);
     } else if (is_cur_token(Token("", NUMBER))) {
         ast.push_back({EXPRESSION_EXP, cur_token.text});
-        next_token();
+        move_to_next_token();
     } else
         abort("Expected identifier or number found " + cur_token.text);
 }
@@ -325,7 +330,7 @@ void Parser::newline() {
 
     ast.push_back({NEW_LINE_EXP, ""});
 
-    next_token();
+    move_to_next_token();
 }
 
 
@@ -340,12 +345,17 @@ void Parser::comparison() {
         abort("Expected comparison operators found " + cur_token.text);
 
     ast.push_back({EXPRESSION_EXP, cur_token.text});
-    next_token();
+    move_to_next_token();
 
     expression();
 
 }
 
+
+
+void Parser::start_parsing() {
+    program();
+}
 
 const vector<EmitQuery> &Parser::getAST() const {
     return ast;

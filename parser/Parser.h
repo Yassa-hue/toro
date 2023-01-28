@@ -7,9 +7,18 @@
 
 
 #include "../lexer/Lexer.h"
-#include "../abstract_emitter/Emitter.h"
 #include "../scope_manager/ScopeManager.h"
 #include "./Emiter_Query.h"
+#include "../token_iterator/TokenIterator.h"
+
+
+
+class ParserError : public CompilationError {
+public:
+    ParserError(string __error_msg) : CompilationError(__error_msg) {
+
+    };
+};
 
 
 // identifier checker statuses
@@ -20,7 +29,7 @@
 
 class Parser {
 private:
-    Lexer *lexer;
+    TokenIterator *tokens_iterator;
 
     ScopeManager *scope_manager;
 
@@ -30,7 +39,7 @@ private:
 
     void test_log(string s);
 
-    void next_token();
+    void move_to_next_token();
 
     bool is_cur_token(Token __token) const;
 
@@ -58,7 +67,9 @@ private:
 
 
 public:
-    Parser(Lexer *__lexer, ScopeManager *__scope_manager);
+    Parser(TokenIterator *__tokens_iterator, ScopeManager *__scope_manager);
+
+    void start_parsing();
 
     const vector <EmitQuery> & getAST() const;
 
