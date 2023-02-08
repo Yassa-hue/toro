@@ -27,7 +27,7 @@ g++ -std=c++20 -c ./cpp_emitter/CppEmitter.cpp -o CppEmitter.o
 g++ -std=c++20 -c ./compilation_error/CompilationError.cpp -o compilation_error.o
 
 
-# Compilation error files
+# Token iterator files
 g++ -std=c++20 -c ./token_iterator/TokenIterator.cpp -o token_iterator.o
 
 
